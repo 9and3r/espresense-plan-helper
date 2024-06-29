@@ -1,8 +1,15 @@
-# React + Vite
+# Espresence plan helper
+This is a utility to help get the Espresence configuration floor section from a Sweethome 3D file.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+You can use the tool online: https://9and3r.github.io/espresense-plan-helper/
 
-Currently, two official plugins are available:
+**This is an early prototype. Make a backup of your config before using it!!!**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# How to use
+- Go to https://9and3r.github.io/espresense-plan-helper/
+- Drop the SweetHome 3d file (.sh3d) to the left part. On the right a preview of the floor
+- Click on the "Generate YAML" button. A dialog with the code will appear so you can merge with the one on your instance
+
+- # Development
+- npm install
+- npm run dev
