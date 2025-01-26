@@ -59,7 +59,6 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId }) => {
       <Layer>
         {Object.entries(rooms).map(([id, room]) => {
           return (
-            <>
               <Line
                 key={id}
                 x={room.position.x}
@@ -85,7 +84,6 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId }) => {
                   });
                 }}
               ></Line>
-            </>
           );
         })}
       </Layer>
