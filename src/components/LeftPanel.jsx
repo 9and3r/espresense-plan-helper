@@ -12,7 +12,7 @@ import { useState } from "react";
 import { roomsToYaml } from "./yaml_util";
 import Configuration from "./Configuration";
 
-const LeftPanel = ({ rooms, setRooms, configuration, setConfiguration }) => {
+const LeftPanel = ({ rooms, setRooms, levels, setLevels, selectedLevel, setSelectedLevel}) => {
   const [yamlDialogOpen, setYamlDialogOpen] = useState(false);
 
   return (
@@ -32,19 +32,21 @@ const LeftPanel = ({ rooms, setRooms, configuration, setConfiguration }) => {
         <DialogTitle>Espresence configuration</DialogTitle>
         {yamlDialogOpen ? (
           <textarea style={{ width: "100%", minHeight: "80vh" }}>
-            {roomsToYaml(configuration, rooms)}
+            {roomsToYaml(rooms, levels)}
           </textarea>
         ) : null}
       </Dialog>
       <Card>
         <Stack sx={{ margin: "1rem" }} gap={2}>
           <Typography variant="h5">1 - Import Sweethome 3D file</Typography>
-          <SweetHomeImport setRooms={setRooms} />
+          <SweetHomeImport setRooms={setRooms} setLevels={setLevels} setSelectedLevel={setSelectedLevel}/>
           <Divider />
           <Typography variant="h5">2 - Configuration</Typography>
           <Configuration
-            configuration={configuration}
-            setConfiguration={setConfiguration}
+            levels={levels}
+            setLevels={setLevels}
+            selectedLevel= {selectedLevel}
+            setSelectedLevel= {setSelectedLevel}
           />
           <Divider />
           <Typography variant="h5">3 - Generate YAML file</Typography>

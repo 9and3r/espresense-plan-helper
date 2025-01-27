@@ -7,11 +7,15 @@ import LeftPanel from "./components/LeftPanel";
 
 function App() {
   const [rooms, setRooms] = useState({});
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [configuration, setConfiguration] = useState({
-    floorId: "first",
-    floorName: "First floor",
+  const [levels, setLevels] = useState([]);
+  const [selectedLevel, setSelectedLevel]= useState({
+    id: "",
+    name: "",
+    elevation: 0,
+    height: 0,
+    floorThickness: 0
   });
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
 
   const divRef = useRef(null);
   const [dimensions, setDimensions] = useState({
@@ -57,8 +61,10 @@ function App() {
         <LeftPanel
           rooms={rooms}
           setRooms={setRooms}
-          configuration={configuration}
-          setConfiguration={setConfiguration}
+          setLevels={setLevels}
+          levels={levels}
+          selectedLevel={selectedLevel}
+          setSelectedLevel={setSelectedLevel}
         />
         <div ref={divRef}>
           <Plan
@@ -66,6 +72,7 @@ function App() {
             rooms={rooms}
             setRooms={setRooms}
             setSelectedRoomId={setSelectedRoomId}
+            selectedLevel={selectedLevel}
           />
         </div>
         {false ? (
