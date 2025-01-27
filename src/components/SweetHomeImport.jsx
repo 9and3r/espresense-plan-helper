@@ -2,7 +2,7 @@ import { BlobReader, TextWriter, ZipReader } from "@zip.js/zip.js";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-const SweetHomeImport = ({ setRooms }) => {
+const SweetHomeImport = ({ setRooms, setLevels, setSelectedLevel }) => {
   const onDrop = useCallback(
     async (acceptedFiles) => {
       // Do something with the files
@@ -23,13 +23,43 @@ const SweetHomeImport = ({ setRooms }) => {
       let result = {};
       let id = 1;
       const rooms = xmlDoc.getElementsByTagName("room");
+      const levelElements = xmlDoc.getElementsByTagName("level");
+      let levels= [];
+
+      if( levelElements.length > 0 ) {
+        for (let i = 0; i < levelElements.length; i++) {
+          let level = levelElements[i];
+          levels[i]= {
+            xmlId: level.attributes.id?.nodeValue,
+            id: level.attributes.id?.nodeValue,
+            name: level.attributes.name?.nodeValue,
+            elevation: parseFloat(level.attributes.elevation?.nodeValue),
+            height: parseFloat(level.attributes.height?.nodeValue),
+            floorThickness: parseFloat(level.attributes.floorThickness?.nodeValue)
+          }
+        }
+        levels.sort((a,b) => {
+          return a.elevation - b.elevation;
+        })
+      } else {
+        levels[levels.length]= {
+          id: "first",
+          name: "First floor",
+          xmlId: "level-235c9abb-1108-441a-8a2d-8f7e100d7554",
+          elevation: 0,
+          height: 300,
+          floorThickness: 0
+        };
+      }
+
       let minX = Number.MAX_VALUE,
       minY= Number.MAX_VALUE;
       for (let i = 0; i < rooms.length; i++) {
         let room = rooms[i];
         let roomObject = {
           id: id,
-          name: room.attributes.name?.nodeValue,
+          name: room.attributes.name?.nodeValue || "Un-named",
+          levelId: room.attributes.level?.nodeValue || levels[0].xmlId,
           points: [],
         };
         let points = room.getElementsByTagName("point");
@@ -75,6 +105,8 @@ const SweetHomeImport = ({ setRooms }) => {
           result[roomId].position.y -= minY;
         }
       }
+      setLevels(levels);
+      setSelectedLevel(levels[0]);
       setRooms(result);
     },
     [setRooms]

@@ -1,10 +1,10 @@
-const roomsToYaml = (configuration, rooms) => {
+const roomsToYaml = (rooms, levels) => {
   let bounds = {
     min: { x: Number.MAX_VALUE, y: Number.MAX_VALUE, z: 0 },
-    max: { x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY, z: 3 },
+    max: { x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY},
   };
 
-  // Update bounds
+  // Update bounds (Currently assumes bounds cover all levels the same)
   Object.entries(rooms).forEach(([id, room]) => {
     room.points.forEach((point) => {
       const x = (room.position.x + point.x) / 100;
@@ -39,37 +39,41 @@ const roomsToYaml = (configuration, rooms) => {
 
   const lines = [];
   lines.push("floors:");
-  lines.push("  - id: " + configuration.floorId);
-  lines.push("    name: " + configuration.floorName);
-  lines.push("    bounds:");
-  lines.push(
-    "      " +
-      "[[" +
-      bounds.min.x +
-      ", " +
-      bounds.min.y +
-      ", " +
-      bounds.min.z +
-      "], [" +
-      bounds.max.x +
-      ", " +
-      bounds.max.y +
-      ", " +
-      bounds.max.z +
-      "]]"
-  );
-  lines.push("    rooms:");
-  Object.entries(rooms).forEach(([id, room]) => {
-    lines.push("      - name: " + room.name);
-    lines.push("        points:");
-    room.points.forEach((point) => {
-      lines.push(
-        "          - [" +
-          (room.position.x + point.x) / 100 +
-          ", " +
-          (room.position.y + point.y) / -100 +
-          "]"
-      );
+  Object.entries(levels).forEach( ([id, level]) => {
+    lines.push("  - id: " + level.id);
+    lines.push("    name: " + level.name);
+    lines.push("    bounds:");
+    lines.push(
+      "      " +
+        "[[" +
+        bounds.min.x +
+        ", " +
+        bounds.min.y +
+        ", " +
+        level.elevation / 100 +
+        "], [" +
+        bounds.max.x +
+        ", " +
+        bounds.max.y +
+        ", " +
+        (level.elevation + +level.height) / 100 +
+        "]]"
+    );
+    lines.push("    rooms:");
+    Object.entries(rooms).filter(([_, room]) => {
+      return room.levelId === level.xmlId;
+    }).forEach(([id, room]) => {
+      lines.push("      - name: " + room.name);
+      lines.push("        points:");
+      room.points.forEach((point) => {
+        lines.push(
+          "          - [" +
+            (room.position.x + point.x) / 100 +
+            ", " +
+            (room.position.y + point.y) / -100 +
+            "]"
+        );
+      });
     });
   });
   return lines.join("\n");
