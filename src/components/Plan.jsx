@@ -1,6 +1,12 @@
 import { useRef } from "react";
 import { Layer, Line, Stage, Text } from "react-konva";
-const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId, selectedLevel }) => {
+const Plan = ({
+  dimensions,
+  rooms,
+  setRooms,
+  setSelectedRoomId,
+  selectedLevel,
+}) => {
   const stars = [{ id: 1, x: 1, y: 1 }];
   const stageRef = useRef();
 
@@ -9,7 +15,7 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId, selectedLevel })
 
     const stage = stageRef.current;
 
-    // stop de=ault scrolling
+    // stop default scrolling
     e.evt.preventDefault();
 
     var oldScale = stage.scaleX();
@@ -55,12 +61,14 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId, selectedLevel })
         setSelectedRoomId(null);
       }}
     >
-      <Layer >
-        {Object.entries(rooms).filter(([_, room]) => {
-          return room.levelId === selectedLevel.xmlId;
-        }).map(([id, room]) => {
-          return (
-            <Line
+      <Layer>
+        {Object.entries(rooms)
+          .filter(([_, room]) => {
+            return room.levelId === selectedLevel.xmlId;
+          })
+          .map(([id, room]) => {
+            return (
+              <Line
                 key={id}
                 x={room.position.x}
                 y={room.position.y}
@@ -85,8 +93,8 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId, selectedLevel })
                   });
                 }}
               ></Line>
-          );
-        })}
+            );
+          })}
       </Layer>
     </Stage>
   );
