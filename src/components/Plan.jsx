@@ -1,7 +1,12 @@
 import { useRef } from "react";
-import { Layer, Line, Stage, Star, Text } from "react-konva";
-
-const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId }) => {
+import { Layer, Line, Stage, Text } from "react-konva";
+const Plan = ({
+  dimensions,
+  rooms,
+  setRooms,
+  setSelectedRoomId,
+  selectedLevel,
+}) => {
   const stars = [{ id: 1, x: 1, y: 1 }];
   const stageRef = useRef();
 
@@ -57,9 +62,12 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId }) => {
       }}
     >
       <Layer>
-        {Object.entries(rooms).map(([id, room]) => {
-          return (
-            <>
+        {Object.entries(rooms)
+          .filter(([_, room]) => {
+            return room.levelId === selectedLevel.xmlId;
+          })
+          .map(([id, room]) => {
+            return (
               <Line
                 key={id}
                 x={room.position.x}
@@ -85,9 +93,8 @@ const Plan = ({ dimensions, rooms, setRooms, setSelectedRoomId }) => {
                   });
                 }}
               ></Line>
-            </>
-          );
-        })}
+            );
+          })}
       </Layer>
     </Stage>
   );
